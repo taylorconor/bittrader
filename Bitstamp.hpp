@@ -48,7 +48,7 @@ public:
 	Tick tick();
 	int buy(double amount, double price);
 	int sell(double amount, double price);
-	vector<int> open_orders();
+	vector<int> *open_orders();
 	
 };
 

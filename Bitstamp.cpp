@@ -93,17 +93,17 @@ int Bitstamp::sell(double amount, double price) {
 	return atoi(id.c_str());
 }
 
-vector<int> Bitstamp::open_orders() {
+vector<int> *Bitstamp::open_orders() {
 	string cmd = "cd "+PYTHON_LOC+" && python orders.py";
 	string res = exec(cmd.c_str());
-	vector<int> orders;
+	vector<int> *orders = new vector<int>();
 	string num;
 	for (int i = 0, done = false; i < res.length() && !done; i++) {
 		switch (res[i]) {
 		case '\n':
 				done = true;
 		case ',':
-				orders.push_back(atoi(num.c_str()));
+				orders->push_back(atoi(num.c_str()));
 				num = "";
 				break;
 		default:

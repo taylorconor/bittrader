@@ -17,6 +17,7 @@ TransactionPool::TransactionPool(MovingAverageStats avg) {
 	}
 	this->logger = Logger::instance();
 	this->open_orders = new vector<int>();
+	this->update_open_orders();
 }
 
 void TransactionPool::update_open_orders() {
@@ -25,14 +26,20 @@ void TransactionPool::update_open_orders() {
 }
 
 void TransactionPool::t_update_open_orders() {
-	
+	while (true) {
+		vector<int> *old_orders = open_orders;
+		open_orders = api.open_orders();
+		delete old_orders;
+		int remaining = UPDATE_FREQUENCY;
+		while (remaining > 0)
+			remaining = sleep(remaining);
+	}
 }
 
 // check if the given orderid is in the list of open orders
 bool TransactionPool::is_in_open_orders(int orderid) {
-	for (int i = 0; i < open_orders->size(); i++) {
-		if (orderid == open_orders->at(i))
-			return true;
+	if (find(open_orders->begin(), open_orders->end(), orderid) != open_orders->end()) {
+		return true;
 	}
 	return false;
 }
@@ -54,6 +61,10 @@ void TransactionPool::update(double ask, double moving_average) {
 				break;
 			case BUY_PENDING:
 				// wait for buy confirmation
+				if (is_in_open_orders(pool[i].buy_id())) {
+					logger->log("buy confirmed! id="+to_string(pool[i].buy_id()));
+					pool[i].buy_confirm();
+				}
 				break;
 			case BUY_CONFIRM:
 				// decide when best to sell
@@ -70,7 +81,11 @@ void TransactionPool::update(double ask, double moving_average) {
 				break;
 			case SELL_PENDING:
 				// wait for sell confirmation
-				break;
+				if (is_in_open_orders(pool[i].sell_id())) {
+					logger->log("sell confirmed! id="+to_string(pool[i].sell_id()));
+				} else {
+					break;
+				}
 			case SELL_CONFIRM:
 				// reset the transaction so it can be used again
 				pool[i].reset();

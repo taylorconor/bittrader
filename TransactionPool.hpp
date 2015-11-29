@@ -18,6 +18,7 @@
 
 #define POOL_SIZE			4
 #define TRANSACTION_AMOUNT	25
+#define UPDATE_FREQUENCY	5
 
 struct MovingAverageStats {
 	double prev_avg;

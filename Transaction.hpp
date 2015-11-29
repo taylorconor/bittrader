@@ -26,8 +26,8 @@ class Transaction {
 private:
 	double _buy_price;
 	double _sell_price;
-	int buy_id;
-	int sell_id;
+	int _buy_id;
+	int _sell_id;
 	double amount;
 	Bitstamp api;
 	TransactionState _state;
@@ -40,7 +40,10 @@ public:
 	bool sell(double price);
 	double buy_price();
 	double sell_price();
+	int buy_id();
+	int sell_id();
 	void reset();
+	void buy_confirm();
 	void sell_when_ready();
 };
 

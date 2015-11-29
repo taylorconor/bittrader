@@ -45,7 +45,8 @@ void Logger::log_ts(string s) {
 // log a tick update
 void Logger::log_tick(int ts, double ask, double moving_average) {
 	stringstream s;
-	s << timestr(ts) << ":\n"
+	s << timestr(time(nullptr)) << ":\n"
+		<< "\ttick time: " << timestr(ts) << "\n"
 		<< "\task: " << ask << "\n"
 		<< "\tmoving average: " << moving_average << "\n";
 	log(s.str());
