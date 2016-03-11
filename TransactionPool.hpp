@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <vector>
 #include <thread>
+#include <algorithm>
+#include <unistd.h>
 #include "Transaction.hpp"
 #include "Bitstamp.hpp"
 #include "Logger.hpp"

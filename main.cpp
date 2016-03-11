@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <thread>
+#include <unistd.h>
 #include "Trader.hpp"
 
 #define FREQUENCY	5
